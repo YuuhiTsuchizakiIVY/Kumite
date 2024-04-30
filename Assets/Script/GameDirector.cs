@@ -10,18 +10,28 @@ public class GameDirector : MonoBehaviour
     GameObject hpGauge;
     Enemy_Generator enemy_GeneratorScript;
     EnemyController enemy_ConScript;
+    GameOverTime GameOverTimeText;
+    GameObject timerText;
+    GameObject GameOverTime;
+    public GameObject GO_Canvas;
     int Exp;
     int P_Level;
     int Exp_Limit;
     public int Bonus_ATK;
     float time = 0.0f;
+    public float timeEnd = 0.0f;
+    bool GameOver;
 
     // Start is called before the first frame update
     void Start()
     {
+        GO_Canvas.SetActive(false);
         this.hpGauge = GameObject.Find("hpGauge");
+        this.timerText = GameObject.Find("Time");
+        
         enemy_GeneratorScript = GameObject.Find("Enemy_Generator").GetComponent<Enemy_Generator>();
         enemy_ConScript = GameObject.Find("Enemy").GetComponent<EnemyController>();
+        
         Exp = 0;
         P_Level = 1;
         Exp_Limit = 5;
@@ -31,9 +41,16 @@ public class GameDirector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.time += Time.deltaTime;
+        
+        
+        if (!GameOver)
+        {
+            this.time += Time.deltaTime;
+            timeEnd += Time.deltaTime;
+        }
+        
 
-        if(this.time / 10 == 0)
+        if (this.time / 10 == 0)
         {
             enemy_ConScript.E_HP += 10;
         }
@@ -46,6 +63,20 @@ public class GameDirector : MonoBehaviour
             Debug.Log("Level" + P_Level);
             Debug.Log("Bonus_ATK" + Bonus_ATK);
             Debug.Log("Exp_Limit" + Exp_Limit);
+        }
+
+        this.timerText.GetComponent<TextMeshProUGUI>().text =
+            this.time.ToString("F1");
+
+        if (CheckHp())
+        {
+            Debug.Log(timeEnd);
+            
+            GameOver = true;
+            GO_Canvas.SetActive(true);
+            this.GameOverTime = GameObject.Find("GameOverTime");
+            this.GameOverTime.GetComponent<TextMeshProUGUI>().text =
+             this.time.ToString("F1");
         }
     }
 
@@ -79,22 +110,9 @@ public class GameDirector : MonoBehaviour
         Debug.Log("åªç›ÇÃEXP" + Exp);
     }
 
-    /*void EnemyGene(float time)
+    public void SceneLoad()
     {
-        if(time < 5)
-        {
-            for(int num = 0;num < 5; num++)
-            {
-                Invoke("Gene", 0.3f);
-            }
-            //Invoke("Gene", 0.3f);
-            
-        }
+        SceneManager.LoadScene("SampleScene");
     }
-
-    void Gene()
-    {
-        enemy_GeneratorScript.Enemy_Gene();
-    }*/
 
   }

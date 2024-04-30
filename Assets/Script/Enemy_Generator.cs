@@ -35,6 +35,15 @@ public class Enemy_Generator : MonoBehaviour
                 Enemy_Gene();
             }
         }
+        else if (Time.deltaTime < 50)
+        {
+            span = 3.0f;
+            if (this.delta > this.span)
+            {
+                this.delta = 0;
+                Enemy_Gene();
+            }
+        }
     }
 
     public void Enemy_Gene()
