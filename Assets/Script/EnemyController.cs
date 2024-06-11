@@ -10,6 +10,7 @@ public class EnemyController : MonoBehaviour
     GameObject Player;
     HeroKnight PlayerScript;
     Orb_Generator Orb_GeneratorScript;
+    HealPortion_Generator HPortion_GeneratorScript;
     GameDirector GameDirectorScript;
     #endregion
 
@@ -36,6 +37,7 @@ public class EnemyController : MonoBehaviour
         PlayerScript = Player.GetComponent<HeroKnight>();
 
         Orb_GeneratorScript = GameObject.Find("Orb_Generator").GetComponent<Orb_Generator>();
+        HPortion_GeneratorScript = GameObject.Find("HPortion_Generator").GetComponent<HealPortion_Generator>();
 
         GameDirectorScript = GameObject.Find("GameDirector").GetComponent<GameDirector>();
         e_animator = GetComponent<Animator>();
@@ -53,7 +55,6 @@ public class EnemyController : MonoBehaviour
         }
         if (move && !death)
         {
-            
 
             if (P_pos.x < E_pos.x)  //“G‚ª¶‚ðŒü‚­
             {
@@ -72,7 +73,13 @@ public class EnemyController : MonoBehaviour
         if(E_HP <= 0)
         {
             death = true;
-            e_animator.SetBool("death", true);
+            int cnt = 0;
+            if(cnt == 0)
+            {
+                e_animator.SetBool("death", true);
+                cnt++;
+            }
+            
             
             Invoke("destroy", 1.0f);
         }
@@ -85,6 +92,7 @@ public class EnemyController : MonoBehaviour
         {
             move = true;
             e_animator.SetBool("run", move);
+            e_animator.SetBool("damage", false);
         }
     }
 
@@ -123,6 +131,8 @@ public class EnemyController : MonoBehaviour
     void destroy()
     {
         Orb_GeneratorScript.Orb_Gene(E_pos);
+        GameDirectorScript.PlusSkillGauge();
+        //HPortion_GeneratorScript.HPortion_Gene(E_pos);
         Destroy(this.gameObject);
     }
 
@@ -154,7 +164,11 @@ public class EnemyController : MonoBehaviour
             case 3:
                 E_HP = E_HP - (30 + GameDirectorScript.Bonus_ATK);
                 break;
+            default:
+                E_HP = E_HP - (15 + GameDirectorScript.Bonus_ATK);
+                break;
         }
+        e_animator.SetBool("damage", true);
         Debug.Log(E_HP);
     }
 

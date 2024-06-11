@@ -7,36 +7,36 @@ public class E2_firetama : MonoBehaviour
     public GameObject enemyTamaPrefab;
     GameObject enemyTama;
     Rigidbody2D enemyTamaRb;
+    private GameObject target;
     public float speed;
     private int timeCount = 0;
-    Enemy2Controller Ene2Con;
     GameObject oya;
     Enemy2Controller oyaScript;
+    Vector3 Targethosei;
     void Start()
     {
         oya = transform.parent.gameObject;
         oyaScript = oya.GetComponent<Enemy2Controller>();
-        Ene2Con = GameObject.Find("Enemy2").GetComponent<Enemy2Controller>();
-        
+        Targethosei = new Vector3(0, 1, 0);
+        target = GameObject.Find("HeroKnight");
     }
 
     void Update()
     {
         timeCount += 1;
-        
 
+        transform.LookAt(target.transform.position + Targethosei);
         if (timeCount % 600 == 0)
         {
-            // 敵のミサイルを生成する
+            // 敵の弾を生成する
             enemyTama = Instantiate(enemyTamaPrefab, transform.position, Quaternion.identity);
             enemyTamaRb = enemyTama.GetComponent<Rigidbody2D>();
 
-            // ミサイルを飛ばす方向を決める。「forward」は「z軸」方向をさす（ポイント）
-            //enemyTamaRb.AddForce(transform.right * speed);
-            this.enemyTamaRb.velocity = new Vector3(oyaScript.P_pos.x - oyaScript.E_pos.x, -2, 2);
-
-            // ３秒後に敵のミサイルを削除する。
-
+            //弾を飛ばす方向を決める。
+            enemyTamaRb.AddForce(transform.forward * speed);
+            
+            // 10秒後に敵の弾を削除する。
+            Destroy(enemyTama, 10);
         }
     }
 }

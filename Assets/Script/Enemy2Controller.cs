@@ -27,6 +27,7 @@ public class Enemy2Controller : MonoBehaviour
     private Animator e_animator;
     float span = 2.0f;
     float delta = 0;
+    HealPortion_Generator HPortion_GeneratorScript;
 
     // Start is called before the first frame update
     void Start()
@@ -38,22 +39,15 @@ public class Enemy2Controller : MonoBehaviour
         PlayerScript = Player.GetComponent<HeroKnight>();
 
         Orb_GeneratorScript = GameObject.Find("Orb_Generator").GetComponent<Orb_Generator>();
+        HPortion_GeneratorScript = GameObject.Find("HPortion_Generator").GetComponent<HealPortion_Generator>();
 
         GameDirectorScript = GameObject.Find("GameDirector").GetComponent<GameDirector>();
         e_animator = GetComponent<Animator>();
         E_HP = 50;
     }
 
-    void FixedUpdate()
+    void Update()
     {
-        this.delta += Time.deltaTime;
-        P_pos = Player.transform.position;
-        E_pos = this.transform.position;
-        if (Orb_GeneratorScript == null)
-        {
-            Debug.LogError("Player、HeroKnightスクリプト、またはOrb_Generatorスクリプトがnullだよ。");
-            return;
-        }
         if (!death && move)
         {
 
@@ -67,7 +61,7 @@ public class Enemy2Controller : MonoBehaviour
                 xVector = 1;
                 transform.localScale = new Vector3(3, 3, 3);
             }
-            if(E_pos.x - P_pos.x < 3 && E_pos.x - P_pos.x >= 2 || E_pos.x - P_pos.x < -3 && E_pos.x - P_pos.x <= -2)
+            if (E_pos.x - P_pos.x < 3 && E_pos.x - P_pos.x >= 2 || E_pos.x - P_pos.x < -3 && E_pos.x - P_pos.x <= -2)
             {
                 rb.velocity = new Vector2(xVector * speed, 0.1f);
             }
@@ -75,32 +69,35 @@ public class Enemy2Controller : MonoBehaviour
             {
                 moveStop();
                 Invoke("moveStart", 1.0f);
-            }  
+            }
         }
 
         if (!move)
         {
             rb.velocity = new Vector2(xVector * speed, -0.05f);
         }
+    }
 
+    void FixedUpdate()
+    {
+        this.delta += Time.deltaTime;
+        P_pos = Player.transform.position;
+        E_pos = this.transform.position;
+        if (Orb_GeneratorScript == null)
+        {
+            Debug.LogError("Player、HeroKnightスクリプト、またはOrb_Generatorスクリプトがnullだよ。");
+            return;
+        }
+        
         if (E_HP <= 0)
         {
             death = true;
             e_animator.SetBool("death", true);
-
             Invoke("destroy", 1.0f);
         }
 
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Floor")
-        {
-            move = true;
-            e_animator.SetBool("run", move);
-        }
-    }
 
     private void OnCollisionStay2D(Collision2D collision)
     {
@@ -108,15 +105,6 @@ public class Enemy2Controller : MonoBehaviour
         if (collision.gameObject.tag == "Player" && !death)       //プレイヤーに触れたらダメージを与える
         {
             director.GetComponent<GameDirector>().DecreaseHp();     //プレイヤーにダメージを与える
-        }
-    }
-
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Floor")
-        {
-            move = false;
-            e_animator.SetBool("run", move);
         }
     }
 
@@ -132,6 +120,8 @@ public class Enemy2Controller : MonoBehaviour
     void moveStart()
     {
         move = true;
+        e_animator.SetBool("damage", false);
+        e_animator.SetBool("run", move);
     }
 
     void moveStop()
@@ -142,6 +132,13 @@ public class Enemy2Controller : MonoBehaviour
     void destroy()
     {
         Orb_GeneratorScript.Orb_Gene(E_pos);
+        GameDirectorScript.PlusSkillGauge();
+        int rnd = (int)Random.Range(1.0f, 101.0f);
+        if(rnd < 31)
+        {
+            HPortion_GeneratorScript.HPortion_Gene(E_pos);
+        }
+        
         Destroy(this.gameObject);
     }
 
@@ -174,24 +171,15 @@ public class Enemy2Controller : MonoBehaviour
             case 3:
                 E_HP = E_HP - (30 + GameDirectorScript.Bonus_ATK);
                 break;
+            default:
+                E_HP = E_HP - (15 + GameDirectorScript.Bonus_ATK);
+                break;
         }
+        e_animator.SetBool("damage", true);
         Debug.Log(E_HP);
     }
 
-    public void Jump()
-    {
-        move = false;
-        if (xVector == 1)                       //向きに応じてジャンプする
-        {
-            this.rb.velocity = new Vector2(1, 5);   //右向き
-        }
-        else
-        {
-            this.rb.velocity = new Vector2(-1, 5);  //左向き
-        }
-    }
-
-    public void Test()
+    void Test()
     {
         Debug.Log("test");
     }

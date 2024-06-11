@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 public class GameDirector : MonoBehaviour
 {
     GameObject hpGauge;
+    public GameObject SkillGauge;
+    public GameObject PortionNum;
     Enemy_Generator enemy_GeneratorScript;
     EnemyController enemy_ConScript;
     GameOverTime GameOverTimeText;
@@ -21,6 +23,8 @@ public class GameDirector : MonoBehaviour
     float time = 0.0f;
     public float timeEnd = 0.0f;
     bool GameOver;
+    public bool SkillOK;
+    public int nowPortionNum;
 
     // Start is called before the first frame update
     void Start()
@@ -28,21 +32,21 @@ public class GameDirector : MonoBehaviour
         GO_Canvas.SetActive(false);
         this.hpGauge = GameObject.Find("hpGauge");
         this.timerText = GameObject.Find("Time");
-        
+        this.SkillGauge = GameObject.Find("SkillGauge");
+        this.PortionNum = GameObject.Find("PortionNum");
         enemy_GeneratorScript = GameObject.Find("Enemy_Generator").GetComponent<Enemy_Generator>();
         enemy_ConScript = GameObject.Find("Enemy").GetComponent<EnemyController>();
-        
+        //this.SkillGauge.GetComponent<Image>().fillAmount -= 100.0f;
         Exp = 0;
         P_Level = 1;
         Exp_Limit = 5;
         Bonus_ATK = 0;
+        nowPortionNum = 0;
     }
 
     // Update is called once per frame
     void Update()
-    {
-        
-        
+    {       
         if (!GameOver)
         {
             this.time += Time.deltaTime;
@@ -70,14 +74,24 @@ public class GameDirector : MonoBehaviour
 
         if (CheckHp())
         {
-            Debug.Log(timeEnd);
-            
             GameOver = true;
             GO_Canvas.SetActive(true);
             this.GameOverTime = GameObject.Find("GameOverTime");
             this.GameOverTime.GetComponent<TextMeshProUGUI>().text =
              this.time.ToString("F1");
         }
+
+        if(this.SkillGauge.GetComponent<Image>().fillAmount == 1.0)
+        {
+            SkillOK = true;
+        }
+        else
+        {
+            SkillOK = false;
+        }
+        this.PortionNum.GetComponent<TextMeshProUGUI>().text =
+             this.nowPortionNum.ToString("D");
+        this.SkillGauge.GetComponent<Image>().fillAmount += 0.00005f;
     }
 
     public void DecreaseHp()
@@ -88,6 +102,21 @@ public class GameDirector : MonoBehaviour
     public void DecreaseHp_Tama()
     {
         this.hpGauge.GetComponent<Image>().fillAmount -= 0.10f;
+    }
+
+    public void DecreaseSkillGauge()
+    {
+        this.SkillGauge.GetComponent<Image>().fillAmount -= 1.0f;
+    }
+
+    public void PlusSkillGauge()
+    {
+        this.SkillGauge.GetComponent<Image>().fillAmount += 0.08f;
+    }
+
+    public void Portion_Heal()
+    {
+        this.hpGauge.GetComponent<Image>().fillAmount += 0.10f;
     }
 
     public bool CheckHp()
@@ -112,7 +141,16 @@ public class GameDirector : MonoBehaviour
 
     public void SceneLoad()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneManager.LoadScene("GameScene");
     }
 
-  }
+    public void EndGame()
+    {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;//ゲームプレイ終了
+#else
+    Application.Quit();//ゲームプレイ終了
+#endif
+    }
+
+}

@@ -29,6 +29,7 @@ public class HeroKnight : MonoBehaviour
 
     bool death = false;
     EnemyController E_Con;
+    GameDirector G_Director;
 
     // Use this for initialization
     void Start()
@@ -41,6 +42,7 @@ public class HeroKnight : MonoBehaviour
         m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
         E_Con = GetComponent<EnemyController>();
+        G_Director = GameObject.Find("GameDirector").GetComponent<GameDirector>();
     }
 
     // Update is called once per frame
@@ -195,6 +197,12 @@ public class HeroKnight : MonoBehaviour
                 death = true;
             }
             
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && G_Director.nowPortionNum > 0)
+        {
+            G_Director.Portion_Heal();
+            G_Director.nowPortionNum--;
         }
     }
 

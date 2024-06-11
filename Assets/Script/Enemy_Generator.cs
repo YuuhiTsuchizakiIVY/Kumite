@@ -48,7 +48,7 @@ public class Enemy_Generator : MonoBehaviour
 
     public void Enemy_Gene()
     {
-        GameObject Orb = Instantiate(Enemy_Prefab);
-        Orb.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, 0);
+        GameObject Enemy = Instantiate(Enemy_Prefab);
+        Enemy.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, 0);
     }
 }
