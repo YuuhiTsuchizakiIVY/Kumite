@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Tama_Con : MonoBehaviour
 {
-    GameDirector GameDirectorScript;
+    GameDirector GameDirector;
     // Start is called before the first frame update
     void Start()
     {
-        GameDirectorScript = GameObject.Find("GameDirector").GetComponent<GameDirector>();
+        GameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
     }
 
     // Update is called once per frame
@@ -19,12 +19,12 @@ public class Tama_Con : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Player")
+        if (collision.gameObject.tag == "Player")   //ÉvÉåÉCÉÑÅ[Ç…êGÇÍÇΩÇÁÉ_ÉÅÅ[ÉWÇó^Ç¶ÇÈ
         {
-            GameDirectorScript.DecreaseHp_Tama();
+            GameDirector.DecreaseHp_Tama();
         }
 
-        if (collision.gameObject.tag == "DEF")
+        if (collision.gameObject.tag == "DEF")      //ñhå‰îªíËÇ…êGÇÍÇΩÇÁîjä¸Ç∑ÇÈ
         {
             Destroy(this.gameObject);
         }

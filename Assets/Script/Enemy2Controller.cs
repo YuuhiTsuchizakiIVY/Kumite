@@ -6,10 +6,10 @@ public class Enemy2Controller : MonoBehaviour
 {
     #region//インスペクターで設定する
     float speed = 1;
-    [Header("重力")] public float gravity;
+    [Header("重力")] public float Gravity;
     GameObject Player;
     HeroKnight PlayerScript;
-    Orb_Generator Orb_GeneratorScript;
+    Orb_Generator OrbGenerator;
     GameDirector GameDirectorScript;
     #endregion
 
@@ -18,16 +18,18 @@ public class Enemy2Controller : MonoBehaviour
     private SpriteRenderer sr = null;
     private bool rightTleftF = false;
     #endregion
-    public Vector3 P_pos;
-    public Vector3 E_pos;
+    public Vector3 _PlayerPosition;
+    public Vector3 _EnemyPosition;
     int xVector;
-    bool move = true;
-    bool death = false;
-    int E_HP;
-    private Animator e_animator;
-    float span = 2.0f;
-    float delta = 0;
-    HealPortion_Generator HPortion_GeneratorScript;
+    bool Move = true;
+    bool Death = false;
+    int EnemyHP;
+    int cnt = 0;
+    private Animator EnemyAnimator;
+
+    HealPortion_Generator HealPortionGenerator;
+    Transform PlayerTransform;
+    Transform EnemyTransform;
 
     // Start is called before the first frame update
     void Start()
@@ -38,20 +40,38 @@ public class Enemy2Controller : MonoBehaviour
         Player = GameObject.Find("HeroKnight");
         PlayerScript = Player.GetComponent<HeroKnight>();
 
-        Orb_GeneratorScript = GameObject.Find("Orb_Generator").GetComponent<Orb_Generator>();
-        HPortion_GeneratorScript = GameObject.Find("HPortion_Generator").GetComponent<HealPortion_Generator>();
+        OrbGenerator = GameObject.Find("Orb_Generator").GetComponent<Orb_Generator>();
+        HealPortionGenerator = GameObject.Find("HPortion_Generator").GetComponent<HealPortion_Generator>();
 
         GameDirectorScript = GameObject.Find("GameDirector").GetComponent<GameDirector>();
-        e_animator = GetComponent<Animator>();
-        E_HP = 50;
+        EnemyAnimator = GetComponent<Animator>();
+        EnemyHP = 50;
+
+        PlayerTransform = Player.transform;
+        EnemyTransform = this.transform;
     }
 
     void Update()
     {
-        if (!death && move)
+        _PlayerPosition = PlayerTransform.position;
+        _EnemyPosition = EnemyTransform.position;
+        if (EnemyHP <= 0)
+        {
+            
+            if (cnt == 0)
+            {
+                cnt++;
+                EnemyAnimator.SetTrigger("death");
+                Invoke("destroy", 1.0f);
+            }
+            Death = true;
+            
+        }
+
+        if (!Death && Move)
         {
 
-            if (P_pos.x < E_pos.x)  //敵が左を向く
+            if (_PlayerPosition.x < _EnemyPosition.x)  //敵が左を向く
             {
                 xVector = -1;
                 transform.localScale = new Vector3(-3, 3, 3);
@@ -61,18 +81,18 @@ public class Enemy2Controller : MonoBehaviour
                 xVector = 1;
                 transform.localScale = new Vector3(3, 3, 3);
             }
-            if (E_pos.x - P_pos.x < 3 && E_pos.x - P_pos.x >= 2 || E_pos.x - P_pos.x < -3 && E_pos.x - P_pos.x <= -2)
+            if (_EnemyPosition.x - _PlayerPosition.x < 3 && _EnemyPosition.x - _PlayerPosition.x >= 2 || _EnemyPosition.x - _PlayerPosition.x < -3 && _EnemyPosition.x - _PlayerPosition.x <= -2)
             {
                 rb.velocity = new Vector2(xVector * speed, 0.1f);
             }
             else
             {
-                moveStop();
-                Invoke("moveStart", 1.0f);
+                MoveStop();
+                Invoke("MoveStart", 1.0f);
             }
         }
 
-        if (!move)
+        if (!Move)
         {
             rb.velocity = new Vector2(xVector * speed, -0.05f);
         }
@@ -80,21 +100,7 @@ public class Enemy2Controller : MonoBehaviour
 
     void FixedUpdate()
     {
-        this.delta += Time.deltaTime;
-        P_pos = Player.transform.position;
-        E_pos = this.transform.position;
-        if (Orb_GeneratorScript == null)
-        {
-            Debug.LogError("Player、HeroKnightスクリプト、またはOrb_Generatorスクリプトがnullだよ。");
-            return;
-        }
         
-        if (E_HP <= 0)
-        {
-            death = true;
-            e_animator.SetBool("death", true);
-            Invoke("destroy", 1.0f);
-        }
 
     }
 
@@ -102,7 +108,7 @@ public class Enemy2Controller : MonoBehaviour
     private void OnCollisionStay2D(Collision2D collision)
     {
         GameObject director = GameObject.Find("GameDirector");
-        if (collision.gameObject.tag == "Player" && !death)       //プレイヤーに触れたらダメージを与える
+        if (collision.gameObject.tag == "Player" && !Death)       //プレイヤーに触れたらダメージを与える
         {
             director.GetComponent<GameDirector>().DecreaseHp();     //プレイヤーにダメージを与える
         }
@@ -112,76 +118,66 @@ public class Enemy2Controller : MonoBehaviour
     {
         if (collision.gameObject.tag == "ATK")      //攻撃判定に触れたら
         {
-            Knock_Back();
-            ATK_damage();
+            KnockBack();
+            ATKDamage();
         }
     }
 
-    void moveStart()
+    void MoveStart()
     {
-        move = true;
-        e_animator.SetBool("damage", false);
-        e_animator.SetBool("run", move);
+        Move = true;
+        EnemyAnimator.SetBool("damage", false);
+        EnemyAnimator.SetBool("run", Move);
     }
 
-    void moveStop()
+    void MoveStop()
     {
-        move = false;
+        Move = false;
     }
 
     void destroy()
     {
-        Orb_GeneratorScript.Orb_Gene(E_pos);
+        OrbGenerator.OrbGenerate(_EnemyPosition);
         GameDirectorScript.PlusSkillGauge();
         int rnd = (int)Random.Range(1.0f, 101.0f);
         if(rnd < 31)
         {
-            HPortion_GeneratorScript.HPortion_Gene(E_pos);
-        }
-        
+            HealPortionGenerator.HealPortionGenerate(_EnemyPosition);
+        }        
         Destroy(this.gameObject);
     }
 
-    void Knock_Back()
+    void KnockBack()
     {
-        move = false;
+        Move = false;
         if (xVector == 1)                       //向きに応じてノックバックする
         {
             this.rb.velocity = new Vector2(-1, 0);
-            //Debug.Log("右向き＿左飛び");
         }
         else
         {
             this.rb.velocity = new Vector2(1, 0);
-            //Debug.Log("左向き＿右飛び");
         }
-        Invoke("moveStart", 0.3f);
+        Invoke("MoveStart", 0.3f);
     }
 
-    void ATK_damage()
+    void ATKDamage()
     {
         switch (PlayerScript.m_currentAttack)   //プレイヤーの攻撃の段階によってダメージを受ける
         {
             case 1:
-                E_HP = E_HP - (15 + GameDirectorScript.Bonus_ATK);
+                EnemyHP = EnemyHP - (15 + GameDirectorScript.BonusATK);
                 break;
             case 2:
-                E_HP = E_HP - (20 + GameDirectorScript.Bonus_ATK);
+                EnemyHP = EnemyHP - (20 + GameDirectorScript.BonusATK);
                 break;
             case 3:
-                E_HP = E_HP - (30 + GameDirectorScript.Bonus_ATK);
+                EnemyHP = EnemyHP - (30 + GameDirectorScript.BonusATK);
                 break;
             default:
-                E_HP = E_HP - (15 + GameDirectorScript.Bonus_ATK);
+                EnemyHP = EnemyHP - (15 + GameDirectorScript.BonusATK);
                 break;
         }
-        e_animator.SetBool("damage", true);
-        Debug.Log(E_HP);
+        EnemyAnimator.SetBool("damage", true);
     }
-
-    void Test()
-    {
-        Debug.Log("test");
-    }
-
 }

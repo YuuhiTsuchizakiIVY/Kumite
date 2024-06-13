@@ -6,7 +6,7 @@ public class HeroKnight : MonoBehaviour
 
     [SerializeField] float m_speed = 2.0f;
     [SerializeField] float m_jumpForce = 5.3f;
-    [SerializeField] float m_rollForce = 7.0f;
+    [SerializeField] float m_rollForce = 70.0f;
     [SerializeField] bool m_noBlood = false;
     [SerializeField] GameObject m_slideDust;
 
@@ -28,8 +28,8 @@ public class HeroKnight : MonoBehaviour
     private float m_rollCurrentTime;
 
     bool death = false;
-    EnemyController E_Con;
-    GameDirector G_Director;
+    EnemyController EnemyController;
+    GameDirector GameDirector;
 
     // Use this for initialization
     void Start()
@@ -41,8 +41,8 @@ public class HeroKnight : MonoBehaviour
         m_wallSensorR2 = transform.Find("WallSensor_R2").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_HeroKnight>();
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
-        E_Con = GetComponent<EnemyController>();
-        G_Director = GameObject.Find("GameDirector").GetComponent<GameDirector>();
+        EnemyController = GetComponent<EnemyController>();
+        GameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
     }
 
     // Update is called once per frame
@@ -149,14 +149,12 @@ public class HeroKnight : MonoBehaviour
             m_animator.SetBool("IdleBlock", false);
 
         // Roll
-        else if (Input.GetKeyDown("left shift") && !m_rolling && !m_isWallSliding && !death)
+        /*else if (Input.GetKeyDown("left shift") && !m_rolling && !m_isWallSliding && !death)
         {
             m_rolling = true;
             m_animator.SetTrigger("Roll");
             m_body2d.velocity = new Vector2(m_facingDirection * m_rollForce, m_body2d.velocity.y);
-            Debug.Log(m_rollForce);
-            Debug.Log(m_body2d.velocity);
-        }
+        }*/
 
 
         //Jump
@@ -199,10 +197,10 @@ public class HeroKnight : MonoBehaviour
             
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && G_Director.nowPortionNum > 0)
+        if (Input.GetKeyDown(KeyCode.E) && GameDirector.NowPortionNum > 0)
         {
-            G_Director.Portion_Heal();
-            G_Director.nowPortionNum--;
+            GameDirector.Portion_Heal();
+            GameDirector.NowPortionNum--;
         }
     }
 

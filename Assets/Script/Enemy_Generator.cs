@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Enemy_Generator : MonoBehaviour
 {
-    public GameObject Enemy_Prefab;
-    float span = 3.0f;
-    float delta = 0;
+    public GameObject EnemyPrefab;
+    float Span = 3.0f;
+    float Delta = 0;
+    float NowTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,40 +16,50 @@ public class Enemy_Generator : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {       
-        this.delta += Time.deltaTime;
-        if(Time.deltaTime < 20)
+    {
+        this.Delta += Time.deltaTime;
+        this.NowTime += Time.deltaTime;
+        if (this.NowTime < 20)
         {
-            span = 5.0f;
-            if (this.delta > this.span)
+            Span = 5.0f;
+            if (this.Delta > this.Span)
             {
-                this.delta = 0;
-                Enemy_Gene();
+                this.Delta = 0;
+                EnemyGenerate();
             }
         }
-        else if (Time.deltaTime < 30)
+        else if (this.NowTime < 30)
         {
-            span = 4.0f;
-            if (this.delta > this.span)
+            Span = 4.0f;
+            if (this.Delta > this.Span)
             {
-                this.delta = 0;
-                Enemy_Gene();
+                this.Delta = 0;
+                EnemyGenerate();
             }
         }
-        else if (Time.deltaTime < 50)
+        else if (this.NowTime < 50)
         {
-            span = 3.0f;
-            if (this.delta > this.span)
+            Span = 3.0f;
+            if (this.Delta > this.Span)
             {
-                this.delta = 0;
-                Enemy_Gene();
+                this.Delta = 0;
+                EnemyGenerate();
+            }
+        }
+        else
+        {
+            Span = 1.5f;
+            if (this.Delta > this.Span)
+            {
+                this.Delta = 0;
+                EnemyGenerate();
             }
         }
     }
 
-    public void Enemy_Gene()
+    public void EnemyGenerate()
     {
-        GameObject Enemy = Instantiate(Enemy_Prefab);
+        GameObject Enemy = Instantiate(EnemyPrefab);
         Enemy.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, 0);
     }
 }

@@ -5,63 +5,61 @@ using UnityEngine;
 public class Sword_Generator : MonoBehaviour
 {
     
-    public GameObject Sword_Prefab;
-    public GameObject SCon;
+    public GameObject SwordPrefab;
     GameObject Sword;
     GameObject Player;
-    Sword_Controller SwordCon_Script;
-    GameDirector Director_Script;
-    Vector3 P_pos;
-    private List<GameObject> swords = new List<GameObject>();
+    GameDirector DirectorScript;
+    Vector3 _PlayerPosition;
+    Transform PlayerTransform;
+    private List<GameObject> SwordList = new List<GameObject>();
     // Start is called before the first frame update
     void Start()
     {
         Player = GameObject.Find("RotateCenter");
-        Director_Script = GameObject.Find("GameDirector").GetComponent<GameDirector>();
+        DirectorScript = GameObject.Find("GameDirector").GetComponent<GameDirector>();
+        PlayerTransform = Player.transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-        P_pos = Player.transform.position;
+
+        _PlayerPosition = PlayerTransform.position;
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            if (Director_Script.SkillOK)
+            if (DirectorScript.SkillOK)
             {
-                SwordGene();
-                Director_Script.DecreaseSkillGauge();
-                Debug.Log("test");
+                SwordGenerate();
+                DirectorScript.DecreaseSkillGauge();
+                
             }           
         }
         
     }
 
-    void SwordGene()
+    void SwordGenerate()
     {
         StartCoroutine(Gene());
-        Debug.Log("swordGene");
     }
 
     public IEnumerator Gene()
     {
         for(int cnt = 0; cnt < 6; cnt++)
         {
-            Sword = Instantiate(Sword_Prefab);
-            Sword.transform.position = new Vector3(P_pos.x, P_pos.y, 0);
-            Debug.Log("Gene");
-            swords.Add(Sword);
+            Sword = Instantiate(SwordPrefab);
+            Sword.transform.position = new Vector3(_PlayerPosition.x, _PlayerPosition.y, 0);
+            SwordList.Add(Sword);
             yield return new WaitForSeconds(0.34f);
         }
-        ShootAllSwords();
+        ShootAllSwordList();
     }
 
-    private void ShootAllSwords()
+    private void ShootAllSwordList()
     {
-        foreach (GameObject sword in swords)
+        foreach (GameObject sword in SwordList)
         {
-            sword.GetComponent<Sword_Controller>().ShootStart();
+            sword.GetComponent<Sword_Controller>().ShotStart();
         }
-        swords.Clear(); // リストをクリア
+        SwordList.Clear(); // リストをクリア
     }
 }

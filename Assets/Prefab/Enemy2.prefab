@@ -159,9 +159,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dca44cd1e1727914ba1978aa4bc7efe2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravity: 0
-  P_pos: {x: 0, y: 0, z: 0}
-  E_pos: {x: 0, y: 0, z: 0}
+  Gravity: 0
+  _PlayerPosition: {x: 0, y: 0, z: 0}
+  _EnemyPosition: {x: 0, y: 0, z: 0}
 --- !u!1 &4930663430974959272
 GameObject:
   m_ObjectHideFlags: 0
@@ -206,5 +206,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7136fd197e7130439f51397f9ec0572, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyTamaPrefab: {fileID: 5628730028847312248, guid: 7b09af3015d51a74fad6e2034a55fc0d, type: 3}
-  speed: 200
+  EnemyTamaPrefab: {fileID: 5628730028847312248, guid: 7b09af3015d51a74fad6e2034a55fc0d, type: 3}
+  Speed: 200

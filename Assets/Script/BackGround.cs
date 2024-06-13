@@ -25,7 +25,7 @@ public class BackGround : MonoBehaviour
 
     void Update()
     {
-     
+
     }
 
     private void FixedUpdate()

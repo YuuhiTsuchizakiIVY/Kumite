@@ -4,39 +4,37 @@ using UnityEngine;
 
 public class E2_firetama : MonoBehaviour
 {
-    public GameObject enemyTamaPrefab;
-    GameObject enemyTama;
-    Rigidbody2D enemyTamaRb;
-    private GameObject target;
-    public float speed;
-    private int timeCount = 0;
-    GameObject oya;
-    Enemy2Controller oyaScript;
-    Vector3 Targethosei;
+    public GameObject EnemyTamaPrefab;
+    GameObject EnemyTama;
+    Rigidbody2D EnemyTamaRb;
+    private GameObject Target;
+    public float Speed;
+    private int TimeCount = 0;
+    Vector3 TargetCorrection;
+    float Delta = 0;
     void Start()
     {
-        oya = transform.parent.gameObject;
-        oyaScript = oya.GetComponent<Enemy2Controller>();
-        Targethosei = new Vector3(0, 1, 0);
-        target = GameObject.Find("HeroKnight");
+        TargetCorrection = new Vector3(0, 1, 0);
+        Target = GameObject.Find("HeroKnight");
     }
 
     void Update()
     {
-        timeCount += 1;
-
-        transform.LookAt(target.transform.position + Targethosei);
-        if (timeCount % 600 == 0)
+        TimeCount += 1;
+        this.Delta += Time.deltaTime;
+        transform.LookAt(Target.transform.position + TargetCorrection);  //HeroKnight‚Ì•ûŒü‚ğŒü‚­@TargetCorrection‚ÅHeroKnight‚Ì“ª‚Ì‚‚³‚ğ‘_‚¤‚æ‚¤‚É’²®
+        if (this.Delta >= 3)
         {
+            this.Delta = 0;
             // “G‚Ì’e‚ğ¶¬‚·‚é
-            enemyTama = Instantiate(enemyTamaPrefab, transform.position, Quaternion.identity);
-            enemyTamaRb = enemyTama.GetComponent<Rigidbody2D>();
+            EnemyTama = Instantiate(EnemyTamaPrefab, transform.position, Quaternion.identity);
+            EnemyTamaRb = EnemyTama.GetComponent<Rigidbody2D>();
 
             //’e‚ğ”ò‚Î‚·•ûŒü‚ğŒˆ‚ß‚éB
-            enemyTamaRb.AddForce(transform.forward * speed);
+            EnemyTamaRb.AddForce(transform.forward * Speed);
             
             // 10•bŒã‚É“G‚Ì’e‚ğíœ‚·‚éB
-            Destroy(enemyTama, 10);
+            Destroy(EnemyTama, 10);
         }
     }
 }

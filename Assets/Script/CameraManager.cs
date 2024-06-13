@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class CameraManager : MonoBehaviour
 {
-    private HeroKnight _player;
-    private Vector3 _initPos;
+    private HeroKnight _Player;
+    private Vector3 _InitPosition;
 
     // Start is called before the first frame update
     void Start()
     {
-        _player = FindObjectOfType<HeroKnight>();
-        _initPos = transform.position;
+        _Player = FindObjectOfType<HeroKnight>();
+        _InitPosition = transform.position;
     }
 
     // Update is called once per frame
@@ -22,8 +22,8 @@ public class CameraManager : MonoBehaviour
 
     private void _FollowPlayer()
     {
-        float y = _player.transform.position.y;
-        float x = _player.transform.position.x;
+        float y = _Player.transform.position.y;
+        float x = _Player.transform.position.x;
 
         transform.position = new Vector3(x, y+2, transform.position.z);
     }

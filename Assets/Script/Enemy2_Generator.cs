@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Enemy2_Generator : MonoBehaviour
 {
-    public GameObject Enemy_Prefab;
-    float span = 3.0f;
+    public GameObject EnemyPrefab;
+    float Span = 3.0f;
     float delta = 0;
+    float NowTime;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,38 +18,49 @@ public class Enemy2_Generator : MonoBehaviour
     void Update()
     {       
         this.delta += Time.deltaTime;
-        if(Time.deltaTime < 20)
+        this.NowTime += Time.deltaTime;
+        if(this.NowTime < 20)
         {
-            span = 10f;
-            if (this.delta > this.span)
+            Span = 8.0f;
+            if (this.delta > this.Span)
             {
                 this.delta = 0;
-                Enemy_Gene();
+                EnemyGanerate();
             }
         }
-        else if (Time.deltaTime < 30)
+        else if (this.NowTime < 30)
         {
-            span = 9.0f;
-            if (this.delta > this.span)
+            Span = 5.0f;
+            if (this.delta > this.Span)
+
             {
                 this.delta = 0;
-                Enemy_Gene();
+                EnemyGanerate();
             }
         }
-        else if (Time.deltaTime < 50)
+        else if (this.NowTime < 50)
         {
-            span = 7.0f;
-            if (this.delta > this.span)
+            Span = 4.0f;
+            if (this.delta > this.Span)
             {
                 this.delta = 0;
-                Enemy_Gene();
+                EnemyGanerate();
+            }
+        }
+        else
+        {
+            Span = 3.0f;
+            if (this.delta > this.Span)
+            {
+                this.delta = 0;
+                EnemyGanerate();
             }
         }
     }
 
-    public void Enemy_Gene()
+    public void EnemyGanerate()
     {
-        GameObject Orb = Instantiate(Enemy_Prefab);
+        GameObject Orb = Instantiate(EnemyPrefab);
         Orb.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, 0);
     }
 }

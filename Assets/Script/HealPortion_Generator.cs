@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class HealPortion_Generator : MonoBehaviour
 {
-    public GameObject HPortion_Prefab;  // publicに変更してUnityエディタから設定可能にする
+    public GameObject HealPortionPrefab;  // publicに変更してUnityエディタから設定可能にする
 
     // Start is called before the first frame update
     void Start()
@@ -18,19 +18,18 @@ public class HealPortion_Generator : MonoBehaviour
         
     }
 
-    public void HPortion_Gene(Vector3 E_pos)
+    public void HealPortionGenerate(Vector3 EnemyPosition)
     {
-        //Debug.Log("オーブじぇね呼び出し");
 
         // nullチェックを追加
-        if (HPortion_Prefab != null)
+        if (HealPortionPrefab != null)
         {
-            GameObject Orb = Instantiate(HPortion_Prefab);
-            Orb.transform.position = new Vector3(E_pos.x, E_pos.y, 0);
+            GameObject Orb = Instantiate(HealPortionPrefab);
+            Orb.transform.position = new Vector3(EnemyPosition.x, EnemyPosition.y, 0);
         }
         else
         {
-            Debug.LogError("HPortion_Prefab or EnemyScript is null.");
+            Debug.LogError("HealPortionPrefab or EnemyScript is null.");
         }
     }
 }

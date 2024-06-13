@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class Orb_Generator : MonoBehaviour
 {
-    public GameObject Orb_Prefab;  // publicに変更してUnityエディタから設定可能にする
-    private EnemyController EnemyScript;
+    public GameObject OrbPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -19,19 +18,9 @@ public class Orb_Generator : MonoBehaviour
 
     }
 
-    public void Orb_Gene(Vector3 E_pos)
+    public void OrbGenerate(Vector3 EnemyPosition)
     {
-        //Debug.Log("オーブじぇね呼び出し");
-
-        // nullチェックを追加
-        if (Orb_Prefab != null)
-        {
-            GameObject Orb = Instantiate(Orb_Prefab);
-            Orb.transform.position = new Vector3(E_pos.x,E_pos.y, 0);
-        }
-        else
-        {
-            Debug.LogError("Orb_Prefab or EnemyScript is null.");
-        }
+        GameObject Orb = Instantiate(OrbPrefab);
+        Orb.transform.position = new Vector3(EnemyPosition.x, EnemyPosition.y, 0);
     }
 }

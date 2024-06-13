@@ -7,41 +7,38 @@ using UnityEngine.SceneManagement;
 
 public class GameDirector : MonoBehaviour
 {
-    GameObject hpGauge;
-    public GameObject SkillGauge;
-    public GameObject PortionNum;
-    Enemy_Generator enemy_GeneratorScript;
-    EnemyController enemy_ConScript;
-    GameOverTime GameOverTimeText;
-    GameObject timerText;
+    GameObject HpGauge;
+    GameObject SkillGauge;
+    GameObject PortionNum;
+    EnemyController EnemyController;
+    GameObject TimerText;
     GameObject GameOverTime;
-    public GameObject GO_Canvas;
+    public GameObject GameOverCanvas;
     int Exp;
-    int P_Level;
-    int Exp_Limit;
-    public int Bonus_ATK;
+    int PlayerLevel;
+    int ExpLimit;
+    public int BonusATK;
     float time = 0.0f;
-    public float timeEnd = 0.0f;
+    public float TimeEnd = 0.0f;
     bool GameOver;
     public bool SkillOK;
-    public int nowPortionNum;
+    public int NowPortionNum;
 
     // Start is called before the first frame update
     void Start()
     {
-        GO_Canvas.SetActive(false);
-        this.hpGauge = GameObject.Find("hpGauge");
-        this.timerText = GameObject.Find("Time");
+        GameOverCanvas.SetActive(false);
+        this.HpGauge = GameObject.Find("hpGauge");
+        this.TimerText = GameObject.Find("Time");
         this.SkillGauge = GameObject.Find("SkillGauge");
         this.PortionNum = GameObject.Find("PortionNum");
-        enemy_GeneratorScript = GameObject.Find("Enemy_Generator").GetComponent<Enemy_Generator>();
-        enemy_ConScript = GameObject.Find("Enemy").GetComponent<EnemyController>();
-        //this.SkillGauge.GetComponent<Image>().fillAmount -= 100.0f;
+        EnemyController = GameObject.Find("Enemy").GetComponent<EnemyController>();
+        this.SkillGauge.GetComponent<Image>().fillAmount -= 50.0f;
         Exp = 0;
-        P_Level = 1;
-        Exp_Limit = 5;
-        Bonus_ATK = 0;
-        nowPortionNum = 0;
+        PlayerLevel = 1;
+        ExpLimit = 5;
+        BonusATK = 0;
+        NowPortionNum = 0;
     }
 
     // Update is called once per frame
@@ -50,38 +47,35 @@ public class GameDirector : MonoBehaviour
         if (!GameOver)
         {
             this.time += Time.deltaTime;
-            timeEnd += Time.deltaTime;
+            TimeEnd += Time.deltaTime;
         }
         
 
         if (this.time / 10 == 0)
         {
-            enemy_ConScript.E_HP += 10;
+            EnemyController.EnemyHP += 10;
         }
 
-        if (Exp_Limit < Exp)
+        if (ExpLimit < Exp)        //レベルアップの判定
         {
-            P_Level++;
-            Exp_Limit = Exp_Limit + 8 + P_Level;
-            Bonus_ATK = Bonus_ATK + 3;
-            Debug.Log("Level" + P_Level);
-            Debug.Log("Bonus_ATK" + Bonus_ATK);
-            Debug.Log("Exp_Limit" + Exp_Limit);
+            PlayerLevel++;
+            ExpLimit = ExpLimit + 8 + PlayerLevel;        //レベル上限を増やす
+            BonusATK = BonusATK + 3;                  //攻撃力をアップする
         }
 
-        this.timerText.GetComponent<TextMeshProUGUI>().text =
+        this.TimerText.GetComponent<TextMeshProUGUI>().text =
             this.time.ToString("F1");
 
-        if (CheckHp())
+        if (CheckHp())      //HPが0になったとき
         {
             GameOver = true;
-            GO_Canvas.SetActive(true);
+            GameOverCanvas.SetActive(true);
             this.GameOverTime = GameObject.Find("GameOverTime");
             this.GameOverTime.GetComponent<TextMeshProUGUI>().text =
              this.time.ToString("F1");
         }
 
-        if(this.SkillGauge.GetComponent<Image>().fillAmount == 1.0)
+        if(this.SkillGauge.GetComponent<Image>().fillAmount == 1.0)     //スキルゲージの量を判定
         {
             SkillOK = true;
         }
@@ -90,18 +84,18 @@ public class GameDirector : MonoBehaviour
             SkillOK = false;
         }
         this.PortionNum.GetComponent<TextMeshProUGUI>().text =
-             this.nowPortionNum.ToString("D");
-        this.SkillGauge.GetComponent<Image>().fillAmount += 0.00005f;
+             this.NowPortionNum.ToString("D");
+        this.SkillGauge.GetComponent<Image>().fillAmount += 0.00005f;   //スキルゲージを時間経過で回復
     }
 
     public void DecreaseHp()
     {
-        this.hpGauge.GetComponent<Image>().fillAmount -= 0.005f;
+        this.HpGauge.GetComponent<Image>().fillAmount -= 0.005f;
     }
 
     public void DecreaseHp_Tama()
     {
-        this.hpGauge.GetComponent<Image>().fillAmount -= 0.10f;
+        this.HpGauge.GetComponent<Image>().fillAmount -= 0.10f;
     }
 
     public void DecreaseSkillGauge()
@@ -116,13 +110,13 @@ public class GameDirector : MonoBehaviour
 
     public void Portion_Heal()
     {
-        this.hpGauge.GetComponent<Image>().fillAmount += 0.10f;
+        this.HpGauge.GetComponent<Image>().fillAmount += 0.10f;
     }
 
     public bool CheckHp()
     {
         bool check;
-        if (this.hpGauge.GetComponent<Image>().fillAmount < 0.001)
+        if (this.HpGauge.GetComponent<Image>().fillAmount < 0.001)
         {
             check = true;
         }
@@ -136,7 +130,6 @@ public class GameDirector : MonoBehaviour
     public void Plus_Exp()
     {
         Exp++;
-        Debug.Log("現在のEXP" + Exp);
     }
 
     public void SceneLoad()

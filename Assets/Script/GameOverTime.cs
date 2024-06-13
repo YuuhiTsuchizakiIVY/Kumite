@@ -6,8 +6,7 @@ using UnityEngine.UI;
 public class GameOverTime : MonoBehaviour
 {
     public Text text;
-    GameDirector _gameDirector;
-    GameObject directorScript;
+    GameDirector GameDirector;
     // Start is called before the first frame update
     void Start()
     {
@@ -20,9 +19,9 @@ public class GameOverTime : MonoBehaviour
         
     }
 
-    public void timeText()
+    public void TimeText()
     {
-        _gameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
-        text.text = _gameDirector.timeEnd.ToString("f1");
+        GameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
+        text.text = GameDirector.TimeEnd.ToString("f1");
     }
 }
