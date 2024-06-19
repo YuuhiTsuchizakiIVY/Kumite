@@ -30,7 +30,7 @@ public class Enemy_Generator : MonoBehaviour
         }
         else if (NowTime < 30)
         {
-            Span = 4.0f;
+            Span = 6.0f;
             if (Delta > Span)
             {
                 this.Delta = 0;
@@ -39,7 +39,7 @@ public class Enemy_Generator : MonoBehaviour
         }
         else if (NowTime < 50)
         {
-            Span = 3.0f;
+            Span = 5.0f;
             if (Delta > Span)
             {
                 Delta = 0;
@@ -48,7 +48,7 @@ public class Enemy_Generator : MonoBehaviour
         }
         else
         {
-            Span = 1.5f;
+            Span = 3.0f;
             if (Delta > Span)
             {
                 Delta = 0;

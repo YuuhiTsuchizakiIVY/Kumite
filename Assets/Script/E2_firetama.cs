@@ -10,7 +10,7 @@ public class E2_firetama : MonoBehaviour
     private GameObject Target;    
     Vector3 TargetCorrection;
     public float Speed = 200;
-    float Delta = 0;
+    public float Delta = 0;
     void Start()
     {
         TargetCorrection = new Vector3(0, 1, 0);

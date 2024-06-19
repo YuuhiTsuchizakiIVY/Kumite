@@ -13,11 +13,9 @@ public class Enemy2Controller : MonoBehaviour
     GameDirector GameDirectorScript;
     #endregion
 
-    #region//プライベート変数
     private Rigidbody2D rb = null;
     private SpriteRenderer sr = null;
     private bool rightTleftF = false;
-    #endregion
     public Vector3 _PlayerPosition;
     public Vector3 _EnemyPosition;
     int xVector;
@@ -31,6 +29,7 @@ public class Enemy2Controller : MonoBehaviour
     Transform PlayerTransform;
     Transform EnemyTransform;
 
+    E2_firetama Enemy2Firetama;
     // Start is called before the first frame update
     void Start()
     {
@@ -49,6 +48,8 @@ public class Enemy2Controller : MonoBehaviour
 
         PlayerTransform = Player.transform;
         EnemyTransform = this.transform;
+
+        Enemy2Firetama = GameObject.Find("Enemy2_firetama").gameObject.GetComponent<E2_firetama>();
     }
 
     void Update()
@@ -94,7 +95,7 @@ public class Enemy2Controller : MonoBehaviour
 
         if (!Move)
         {
-            rb.velocity = new Vector2(xVector * speed, -0.05f);
+            rb.velocity = new Vector2(xVector * speed, 0.05f);
         }
     }
 
@@ -120,6 +121,7 @@ public class Enemy2Controller : MonoBehaviour
         {
             KnockBack();
             ATKDamage();
+            Enemy2Firetama.Delta = 0.0f;
         }
     }
 

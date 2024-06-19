@@ -170,11 +170,11 @@ public class EnemyController : MonoBehaviour
         Move = false;
         if (xVector == 1)                       //向きに応じてジャンプする
         {
-            this.rb.velocity = new Vector2(1, 5);   //右向き
+            this.rb.velocity = new Vector2(1, 5.3f);   //右向き
         }
         else
         {
-            this.rb.velocity = new Vector2(-1, 5);  //左向き
+            this.rb.velocity = new Vector2(-1, 5.3f);  //左向き
         }
     }
 }
