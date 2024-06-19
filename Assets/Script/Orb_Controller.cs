@@ -11,7 +11,7 @@ public class Orb_Controller : MonoBehaviour
     {
         GameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
         RigitBody = GetComponent<Rigidbody2D>();
-        this.RigitBody.velocity = new Vector2(0, 3);
+        RigitBody.velocity = new Vector2(0, 3);
     }
 
     // Update is called once per frame
@@ -25,7 +25,7 @@ public class Orb_Controller : MonoBehaviour
         if (collision.gameObject.tag == "Player")
         {
             GameDirector.Plus_Exp();
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
     }
 }

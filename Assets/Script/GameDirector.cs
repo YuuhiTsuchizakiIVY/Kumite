@@ -10,7 +10,7 @@ public class GameDirector : MonoBehaviour
     GameObject HpGauge;
     GameObject SkillGauge;
     GameObject PortionNum;
-    EnemyController EnemyController;
+    public EnemyController EnemyController;
     GameObject TimerText;
     GameObject GameOverTime;
     public GameObject GameOverCanvas;
@@ -18,8 +18,11 @@ public class GameDirector : MonoBehaviour
     int PlayerLevel;
     int ExpLimit;
     public int BonusATK;
-    float time = 0.0f;
+    public int BonusEnemyHP;
+    float NowTime = 0.0f;
     public float TimeEnd = 0.0f;
+    int Span;
+    float SpanTime;
     bool GameOver;
     public bool SkillOK;
     public int NowPortionNum;
@@ -28,17 +31,19 @@ public class GameDirector : MonoBehaviour
     void Start()
     {
         GameOverCanvas.SetActive(false);
-        this.HpGauge = GameObject.Find("hpGauge");
-        this.TimerText = GameObject.Find("Time");
-        this.SkillGauge = GameObject.Find("SkillGauge");
-        this.PortionNum = GameObject.Find("PortionNum");
-        EnemyController = GameObject.Find("Enemy").GetComponent<EnemyController>();
-        this.SkillGauge.GetComponent<Image>().fillAmount -= 50.0f;
+        HpGauge = GameObject.Find("hpGauge");
+        TimerText = GameObject.Find("Time");
+        SkillGauge = GameObject.Find("SkillGauge");
+        PortionNum = GameObject.Find("PortionNum");
+        //EnemyController = GameObject.Find("Skelton").GetComponent<EnemyController>();
+        SkillGauge.GetComponent<Image>().fillAmount -= 50.0f;
         Exp = 0;
         PlayerLevel = 1;
         ExpLimit = 5;
         BonusATK = 0;
         NowPortionNum = 0;
+        Span = 10;
+        SpanTime = 0;
     }
 
     // Update is called once per frame
@@ -46,36 +51,38 @@ public class GameDirector : MonoBehaviour
     {       
         if (!GameOver)
         {
-            this.time += Time.deltaTime;
+            NowTime += Time.deltaTime;
+            SpanTime += Time.deltaTime;
             TimeEnd += Time.deltaTime;
         }
         
 
-        if (this.time / 10 == 0)
+        if (SpanTime >= Span)
         {
-            EnemyController.EnemyHP += 10;
+            BonusEnemyHP += 10;
+            SpanTime = 0;
         }
 
         if (ExpLimit < Exp)        //レベルアップの判定
         {
             PlayerLevel++;
             ExpLimit = ExpLimit + 8 + PlayerLevel;        //レベル上限を増やす
-            BonusATK = BonusATK + 3;                  //攻撃力をアップする
+            BonusATK = BonusATK + 3;                      //攻撃力をアップする
         }
 
-        this.TimerText.GetComponent<TextMeshProUGUI>().text =
-            this.time.ToString("F1");
+        TimerText.GetComponent<TextMeshProUGUI>().text =
+            NowTime.ToString("F1");
 
         if (CheckHp())      //HPが0になったとき
         {
             GameOver = true;
             GameOverCanvas.SetActive(true);
-            this.GameOverTime = GameObject.Find("GameOverTime");
-            this.GameOverTime.GetComponent<TextMeshProUGUI>().text =
-             this.time.ToString("F1");
+            GameOverTime = GameObject.Find("GameOverTime");
+            GameOverTime.GetComponent<TextMeshProUGUI>().text =
+            NowTime.ToString("F1");
         }
 
-        if(this.SkillGauge.GetComponent<Image>().fillAmount == 1.0)     //スキルゲージの量を判定
+        if(SkillGauge.GetComponent<Image>().fillAmount == 1.0)     //スキルゲージの量を判定
         {
             SkillOK = true;
         }
@@ -83,40 +90,40 @@ public class GameDirector : MonoBehaviour
         {
             SkillOK = false;
         }
-        this.PortionNum.GetComponent<TextMeshProUGUI>().text =
-             this.NowPortionNum.ToString("D");
-        this.SkillGauge.GetComponent<Image>().fillAmount += 0.00005f;   //スキルゲージを時間経過で回復
+        PortionNum.GetComponent<TextMeshProUGUI>().text =
+             NowPortionNum.ToString("D");
+        SkillGauge.GetComponent<Image>().fillAmount += 0.00005f;   //スキルゲージを時間経過で回復
     }
 
     public void DecreaseHp()
     {
-        this.HpGauge.GetComponent<Image>().fillAmount -= 0.005f;
+        HpGauge.GetComponent<Image>().fillAmount -= 0.005f;
     }
 
     public void DecreaseHp_Tama()
     {
-        this.HpGauge.GetComponent<Image>().fillAmount -= 0.10f;
+        HpGauge.GetComponent<Image>().fillAmount -= 0.10f;
     }
 
     public void DecreaseSkillGauge()
     {
-        this.SkillGauge.GetComponent<Image>().fillAmount -= 1.0f;
+        SkillGauge.GetComponent<Image>().fillAmount -= 1.0f;
     }
 
     public void PlusSkillGauge()
     {
-        this.SkillGauge.GetComponent<Image>().fillAmount += 0.08f;
+       SkillGauge.GetComponent<Image>().fillAmount += 0.05f;
     }
 
     public void Portion_Heal()
     {
-        this.HpGauge.GetComponent<Image>().fillAmount += 0.10f;
+        HpGauge.GetComponent<Image>().fillAmount += 0.10f;
     }
 
     public bool CheckHp()
     {
         bool check;
-        if (this.HpGauge.GetComponent<Image>().fillAmount < 0.001)
+        if (HpGauge.GetComponent<Image>().fillAmount < 0.001)
         {
             check = true;
         }

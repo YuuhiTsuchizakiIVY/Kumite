@@ -7,10 +7,9 @@ public class E2_firetama : MonoBehaviour
     public GameObject EnemyTamaPrefab;
     GameObject EnemyTama;
     Rigidbody2D EnemyTamaRb;
-    private GameObject Target;
-    public float Speed;
-    private int TimeCount = 0;
+    private GameObject Target;    
     Vector3 TargetCorrection;
+    public float Speed = 200;
     float Delta = 0;
     void Start()
     {
@@ -20,12 +19,11 @@ public class E2_firetama : MonoBehaviour
 
     void Update()
     {
-        TimeCount += 1;
-        this.Delta += Time.deltaTime;
+        Delta += Time.deltaTime;
         transform.LookAt(Target.transform.position + TargetCorrection);  //HeroKnight‚Ì•ûŒü‚ğŒü‚­@TargetCorrection‚ÅHeroKnight‚Ì“ª‚Ì‚‚³‚ğ‘_‚¤‚æ‚¤‚É’²®
-        if (this.Delta >= 3)
+        if (Delta >= 3)
         {
-            this.Delta = 0;
+            Delta = 0;
             // “G‚Ì’e‚ğ¶¬‚·‚é
             EnemyTama = Instantiate(EnemyTamaPrefab, transform.position, Quaternion.identity);
             EnemyTamaRb = EnemyTama.GetComponent<Rigidbody2D>();

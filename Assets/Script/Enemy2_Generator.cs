@@ -17,42 +17,42 @@ public class Enemy2_Generator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {       
-        this.delta += Time.deltaTime;
-        this.NowTime += Time.deltaTime;
-        if(this.NowTime < 20)
+        delta += Time.deltaTime;
+        NowTime += Time.deltaTime;
+        if(NowTime < 20)
         {
             Span = 8.0f;
-            if (this.delta > this.Span)
+            if (delta > Span)
             {
-                this.delta = 0;
+                delta = 0;
                 EnemyGanerate();
             }
         }
-        else if (this.NowTime < 30)
+        else if (NowTime < 30)
         {
             Span = 5.0f;
-            if (this.delta > this.Span)
+            if (delta > Span)
 
             {
-                this.delta = 0;
+                delta = 0;
                 EnemyGanerate();
             }
         }
-        else if (this.NowTime < 50)
+        else if (NowTime < 50)
         {
             Span = 4.0f;
-            if (this.delta > this.Span)
+            if (delta > Span)
             {
-                this.delta = 0;
+                delta = 0;
                 EnemyGanerate();
             }
         }
         else
         {
             Span = 3.0f;
-            if (this.delta > this.Span)
+            if (delta > Span)
             {
-                this.delta = 0;
+                delta = 0;
                 EnemyGanerate();
             }
         }
@@ -61,6 +61,6 @@ public class Enemy2_Generator : MonoBehaviour
     public void EnemyGanerate()
     {
         GameObject Orb = Instantiate(EnemyPrefab);
-        Orb.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, 0);
+        Orb.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
     }
 }

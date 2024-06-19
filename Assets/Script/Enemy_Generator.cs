@@ -5,8 +5,8 @@ using UnityEngine;
 public class Enemy_Generator : MonoBehaviour
 {
     public GameObject EnemyPrefab;
-    float Span = 3.0f;
-    float Delta = 0;
+    float Span;
+    float Delta;
     float NowTime;
     // Start is called before the first frame update
     void Start()
@@ -17,41 +17,41 @@ public class Enemy_Generator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.Delta += Time.deltaTime;
-        this.NowTime += Time.deltaTime;
-        if (this.NowTime < 20)
+        Delta += Time.deltaTime;
+        NowTime += Time.deltaTime;
+        if (NowTime < 20)
         {
             Span = 5.0f;
-            if (this.Delta > this.Span)
+            if (Delta > Span)
             {
                 this.Delta = 0;
                 EnemyGenerate();
             }
         }
-        else if (this.NowTime < 30)
+        else if (NowTime < 30)
         {
             Span = 4.0f;
-            if (this.Delta > this.Span)
+            if (Delta > Span)
             {
                 this.Delta = 0;
                 EnemyGenerate();
             }
         }
-        else if (this.NowTime < 50)
+        else if (NowTime < 50)
         {
             Span = 3.0f;
-            if (this.Delta > this.Span)
+            if (Delta > Span)
             {
-                this.Delta = 0;
+                Delta = 0;
                 EnemyGenerate();
             }
         }
         else
         {
             Span = 1.5f;
-            if (this.Delta > this.Span)
+            if (Delta > Span)
             {
-                this.Delta = 0;
+                Delta = 0;
                 EnemyGenerate();
             }
         }
@@ -60,6 +60,6 @@ public class Enemy_Generator : MonoBehaviour
     public void EnemyGenerate()
     {
         GameObject Enemy = Instantiate(EnemyPrefab);
-        Enemy.transform.position = new Vector3(this.transform.position.x, this.transform.position.y, 0);
+        Enemy.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
     }
 }
