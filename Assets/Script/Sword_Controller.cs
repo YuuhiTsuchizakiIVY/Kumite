@@ -23,12 +23,15 @@ public class Sword_Controller : MonoBehaviour
     private float ShotPower = 1000f;
 
     bool Hassha;
+    public AudioClip SwordSE;
+    AudioSource AudioSource;
     // Start is called before the first frame update
     void Start()
     {
         Player = GameObject.Find("RotateCenter");
         Target = Player.transform;
         RigitBody = GetComponent<Rigidbody2D>();
+        AudioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -60,6 +63,7 @@ public class Sword_Controller : MonoBehaviour
         yield return new WaitForSeconds(3.0f);
         Hassha = true;
         RigitBody.AddForce(transform.up * ShotPower, ForceMode2D.Force);
+        AudioSource.PlayOneShot(SwordSE);
         Destroy(this.gameObject, 3f);
     }
 }

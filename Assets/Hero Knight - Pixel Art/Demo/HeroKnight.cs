@@ -31,6 +31,12 @@ public class HeroKnight : MonoBehaviour
     EnemyController EnemyController;
     GameDirector GameDirector;
 
+    public AudioClip ATK1;
+    public AudioClip ATK2;
+    public AudioClip ATK3;
+
+    AudioSource AudioSource;
+
     // Use this for initialization
     void Start()
     {
@@ -43,6 +49,7 @@ public class HeroKnight : MonoBehaviour
         m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_HeroKnight>();
         EnemyController = GetComponent<EnemyController>();
         GameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
+        AudioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -136,6 +143,20 @@ public class HeroKnight : MonoBehaviour
 
             // Reset timer
             m_timeSinceAttack = 0.0f;
+
+            
+            switch (m_currentAttack)
+            {
+                case 1:
+                    AudioSource.PlayOneShot(ATK1);
+                    break;
+                case 2:
+                    AudioSource.PlayOneShot(ATK2);
+                    break;
+                case 3:
+                    AudioSource.PlayOneShot(ATK3);
+                    break;
+            }
         }
 
         // Block

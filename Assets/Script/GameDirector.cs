@@ -14,6 +14,7 @@ public class GameDirector : MonoBehaviour
     GameObject TimerText;
     GameObject GameOverTime;
     public GameObject GameOverCanvas;
+    BGMController BGMController;
     int Exp;
     int PlayerLevel;
     int ExpLimit;
@@ -30,13 +31,11 @@ public class GameDirector : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GameOverCanvas.SetActive(false);
         HpGauge = GameObject.Find("hpGauge");
         TimerText = GameObject.Find("Time");
         SkillGauge = GameObject.Find("SkillGauge");
         PortionNum = GameObject.Find("PortionNum");
-        //EnemyController = GameObject.Find("Skelton").GetComponent<EnemyController>();
-        SkillGauge.GetComponent<Image>().fillAmount -= 50.0f;
+        SkillGauge.GetComponent<Image>().fillAmount -= 0.5f;
         Exp = 0;
         PlayerLevel = 1;
         ExpLimit = 5;
@@ -44,6 +43,7 @@ public class GameDirector : MonoBehaviour
         NowPortionNum = 0;
         Span = 10;
         SpanTime = 0;
+        BGMController = GameObject.Find("BGM").GetComponent<BGMController>();
     }
 
     // Update is called once per frame
@@ -80,6 +80,7 @@ public class GameDirector : MonoBehaviour
             GameOverTime = GameObject.Find("GameOverTime");
             GameOverTime.GetComponent<TextMeshProUGUI>().text =
             NowTime.ToString("F1");
+            BGMController.BGMStop();
         }
 
         if(SkillGauge.GetComponent<Image>().fillAmount == 1.0)     //スキルゲージの量を判定
