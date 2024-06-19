@@ -44,7 +44,6 @@ public class EnemyController : MonoBehaviour
         GameDirector = GameObject.Find("GameDirector").GetComponent<GameDirector>();
         EnemyAnimator = GetComponent<Animator>();
         EnemyHP = 50 + GameDirector.BonusEnemyHP;
-        Debug.Log("EnemyHP" + EnemyHP);
         PlayerTransform = Player.transform;
         EnemyTransform = this.transform;
     }

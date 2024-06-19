@@ -21,7 +21,7 @@ public class Enemy2_Generator : MonoBehaviour
         NowTime += Time.deltaTime;
         if(NowTime < 20)
         {
-            Span = 8.0f;
+            Span = 10.0f;
             if (delta > Span)
             {
                 delta = 0;
@@ -30,9 +30,8 @@ public class Enemy2_Generator : MonoBehaviour
         }
         else if (NowTime < 30)
         {
-            Span = 5.0f;
+            Span = 7.0f;
             if (delta > Span)
-
             {
                 delta = 0;
                 EnemyGanerate();
@@ -40,7 +39,7 @@ public class Enemy2_Generator : MonoBehaviour
         }
         else if (NowTime < 50)
         {
-            Span = 4.0f;
+            Span = 5.0f;
             if (delta > Span)
             {
                 delta = 0;
@@ -49,7 +48,7 @@ public class Enemy2_Generator : MonoBehaviour
         }
         else
         {
-            Span = 3.0f;
+            Span = 4.0f;
             if (delta > Span)
             {
                 delta = 0;
