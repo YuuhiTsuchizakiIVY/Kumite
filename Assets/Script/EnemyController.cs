@@ -4,20 +4,17 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    #region//インスペクターで設定する
     float Speed = 1.5f;
     [Header("重力")] public float Gravity;
     GameObject Player;
     HeroKnight HeroKnight;
     Orb_Generator OrbGenerator;
     GameDirector GameDirector;
-    #endregion
 
-    #region//プライベート変数
-    private Rigidbody2D rb = null;
-    private SpriteRenderer sr = null;
+    private Rigidbody2D RigitBody = null;
+    private SpriteRenderer SpriteRenderer = null;
     private bool rightTleftF = false;
-    #endregion
+
     Vector3 _PlayerPosition;
     public Vector3 _EnemyPosition;
     int xVector;
@@ -33,8 +30,8 @@ public class EnemyController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {   
-        rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
+        RigitBody = GetComponent<Rigidbody2D>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
 
         Player = GameObject.Find("HeroKnight");
         HeroKnight = Player.GetComponent<HeroKnight>();
@@ -66,7 +63,7 @@ public class EnemyController : MonoBehaviour
                 transform.localScale = new Vector3(2, 2, 2);
             }
 
-            rb.velocity = new Vector2(xVector * Speed, - Gravity);
+            RigitBody.velocity = new Vector2(xVector * Speed, - Gravity);
         }
 
         if(EnemyHP <= 0)
@@ -137,11 +134,11 @@ public class EnemyController : MonoBehaviour
         Move = false;
         if (xVector == 1)                       //向きに応じてノックバックする
         {
-            this.rb.velocity = new Vector2(-3, 2);
+            this.RigitBody.velocity = new Vector2(-3, 2);
         }
         else
         {
-            this.rb.velocity = new Vector2(3, 2);
+            this.RigitBody.velocity = new Vector2(3, 2);
         }
     }
 
@@ -170,11 +167,11 @@ public class EnemyController : MonoBehaviour
         Move = false;
         if (xVector == 1)                       //向きに応じてジャンプする
         {
-            this.rb.velocity = new Vector2(1, 5.3f);   //右向き
+            this.RigitBody.velocity = new Vector2(1, 5.3f);   //右向き
         }
         else
         {
-            this.rb.velocity = new Vector2(-1, 5.3f);  //左向き
+            this.RigitBody.velocity = new Vector2(-1, 5.3f);  //左向き
         }
     }
 }

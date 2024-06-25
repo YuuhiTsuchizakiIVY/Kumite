@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class Enemy2Controller : MonoBehaviour
 {
-    #region//インスペクターで設定する
     float speed = 1;
     [Header("重力")] public float Gravity;
     GameObject Player;
     HeroKnight PlayerScript;
     Orb_Generator OrbGenerator;
     GameDirector GameDirectorScript;
-    #endregion
 
-    private Rigidbody2D rb = null;
-    private SpriteRenderer sr = null;
+    private Rigidbody2D RigitBody = null;
+    private SpriteRenderer SpriteRenderer = null;
     private bool rightTleftF = false;
     public Vector3 _PlayerPosition;
     public Vector3 _EnemyPosition;
@@ -33,8 +31,8 @@ public class Enemy2Controller : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        sr = GetComponent<SpriteRenderer>();
+        RigitBody = GetComponent<Rigidbody2D>();
+        SpriteRenderer = GetComponent<SpriteRenderer>();
 
         Player = GameObject.Find("HeroKnight");
         PlayerScript = Player.GetComponent<HeroKnight>();
@@ -58,7 +56,6 @@ public class Enemy2Controller : MonoBehaviour
         _EnemyPosition = EnemyTransform.position;
         if (EnemyHP <= 0)
         {
-            
             if (cnt == 0)
             {
                 cnt++;
@@ -84,7 +81,7 @@ public class Enemy2Controller : MonoBehaviour
             }
             if (_EnemyPosition.x - _PlayerPosition.x < 3 && _EnemyPosition.x - _PlayerPosition.x >= 2 || _EnemyPosition.x - _PlayerPosition.x < -3 && _EnemyPosition.x - _PlayerPosition.x <= -2)
             {
-                rb.velocity = new Vector2(xVector * speed, 0.1f);
+                RigitBody.velocity = new Vector2(xVector * speed, 0.1f);
             }
             else
             {
@@ -95,16 +92,9 @@ public class Enemy2Controller : MonoBehaviour
 
         if (!Move)
         {
-            rb.velocity = new Vector2(xVector * speed, 0.05f);
+            RigitBody.velocity = new Vector2(xVector * speed, 0.05f);
         }
     }
-
-    void FixedUpdate()
-    {
-        
-
-    }
-
 
     private void OnCollisionStay2D(Collision2D collision)
     {
@@ -154,11 +144,11 @@ public class Enemy2Controller : MonoBehaviour
         Move = false;
         if (xVector == 1)                       //向きに応じてノックバックする
         {
-            this.rb.velocity = new Vector2(-1, 0);
+            this.RigitBody.velocity = new Vector2(-1, 0);
         }
         else
         {
-            this.rb.velocity = new Vector2(1, 0);
+            this.RigitBody.velocity = new Vector2(1, 0);
         }
         Invoke("MoveStart", 0.3f);
     }

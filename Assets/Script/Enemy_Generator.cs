@@ -5,13 +5,14 @@ using UnityEngine;
 public class Enemy_Generator : MonoBehaviour
 {
     public GameObject EnemyPrefab;
+    GameObject Enemy;
     float Span;
     float Delta;
     float NowTime;
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -59,7 +60,7 @@ public class Enemy_Generator : MonoBehaviour
 
     public void EnemyGenerate()
     {
-        GameObject Enemy = Instantiate(EnemyPrefab);
+        Enemy = Instantiate(EnemyPrefab);
         Enemy.transform.position = new Vector3(transform.position.x, transform.position.y, 0);
     }
 }
